@@ -9,18 +9,20 @@
 
       <router-view/>
     </v-content>
+
+    <common-footer-navigation />
   </v-app>
 </template>
 
 <script>
 import CommonNavigation from './components/common/CommonNavigation.vue';
-// import CommonFooterNavigation from './components/common/CommonFooterNavigation.vue';
+import CommonFooterNavigation from './components/common/CommonFooterNavigation.vue';
 
 export default {
   name: 'App',
   components: {
     CommonNavigation,
-    // CommonFooterNavigation,
+    CommonFooterNavigation,
   },
   data: () => ({
     isAlertDisplayed: false,
