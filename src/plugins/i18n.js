@@ -1,7 +1,27 @@
 import Vue from 'vue';
 import VueI18n from 'vue-i18n';
+import en from 'vee-validate/dist/locale/en.json';
+import de from 'vee-validate/dist/locale/de.json';
 
 Vue.use(VueI18n);
+
+const x = {
+  de: {
+    fields: {
+      email: 'E-Mail',
+      password: 'Passwort',
+    },
+    validation: de.messages,
+  },
+
+  en: {
+    fields: {
+      email: 'E-mail',
+      password: 'Password',
+    },
+    validation: en.messages,
+  },
+};
 
 function loadLocaleMessages() {
   const locales = require.context('../locales', true, /[A-Za-z0-9-_,\s]+\.json$/i);
@@ -11,6 +31,9 @@ function loadLocaleMessages() {
     if (matched && matched.length > 1) {
       const locale = matched[1];
       messages[locale] = locales(key);
+
+      messages[locale].fields = x[locale].fields;
+      messages[locale].validation = x[locale].validation;
     }
   });
   return messages;
