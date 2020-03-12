@@ -12,9 +12,11 @@
   "dependencies": {
     "@mdi/font": "^3.6.95",
     "core-js": "^3.6.4",
+    "faker": "^4.1.0",
     "firebase": "^7.10.0",
     "register-service-worker": "^1.6.2",
     "roboto-fontface": "*",
+    "uuid": "^7.0.2",
     "vee-validate": "^3.2.5",
     "vue": "^2.6.11",
     "vue-i18n": "^8.0.0",
