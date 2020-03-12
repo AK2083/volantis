@@ -10,15 +10,15 @@
         <v-list-item-content>
 
           <div class="overline mb-4">
-            <ProjectCardLine :project="project" target="oline"/>
+            {{ project.oline }}
           </div>
 
           <v-list-item-title class="headline mb-1">
-            <ProjectCardLine :project="project" target="head"/>
+            {{ project.head }}
           </v-list-item-title>
 
           <v-list-item-subtitle>
-            <ProjectCardLine :project="project" target="sub"/>
+            {{ project.sub }}
           </v-list-item-subtitle>
         </v-list-item-content>
 
@@ -33,25 +33,28 @@
         <v-btn icon text>
           <v-icon>mdi-eye</v-icon>
         </v-btn>
+        <v-btn icon text>
+          <project-edit :project="project" :projectKey="projectKey"/>
+        </v-btn>
       </v-card-actions>
     </v-card>
   </div>
 </template>
 
 <script>
-import ProjectCardLine from './ProjectCardLine.vue';
+import ProjectEdit from './ProjectEdit.vue';
 
 export default {
   name: 'ProjectCard',
   props: ['project', 'projectKey'],
-  components: {
-    ProjectCardLine,
-  },
+  components: { ProjectEdit },
+
   methods: {
     removeProjectCard() {
-      this.$store.commit('projects/removeProject', this.project.id);
+      this.$store.dispatch('projects/delete', this.projectKey);
     },
   },
+
   computed: {
     getFirstAndLastLetter() {
       return this.project.head.charAt(0).toUpperCase() + this.project.head.charAt(1).toUpperCase();

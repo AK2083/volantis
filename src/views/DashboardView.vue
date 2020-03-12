@@ -21,21 +21,38 @@
 </template>
 
 <script>
+import * as faker from 'faker';
+import { v4 as uuidv4 } from 'uuid';
 import ProjectCard from '../components/ProjectCard.vue';
 
 export default {
   name: 'DashboardView',
+
   components: {
     ProjectCard,
   },
+
   methods: {
     addProject() {
-      this.$store.commit('projects/addProject');
+      this.$store.dispatch('projects/insert', {
+        id: uuidv4(),
+        oline: new Date().toLocaleString(),
+        head: `${faker.address.state()} Project`,
+        sub: faker.lorem.sentence(),
+      });
     },
   },
+
+  created() {
+    const where = [];
+    const orderBy = ['oline'];
+
+    this.$store.dispatch('projects/openDBChannel', { clauses: { where, orderBy } });
+  },
+
   computed: {
     getProjects() {
-      return this.$store.getters['projects/currentProjects'];
+      return this.$store.state.projects.data;
     },
   },
 };
