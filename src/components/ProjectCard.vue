@@ -30,7 +30,7 @@
       </v-list-item>
 
       <v-card-actions>
-        <v-btn icon text>
+        <v-btn icon text @click="routing">
           <v-icon>mdi-eye</v-icon>
         </v-btn>
         <v-btn icon text>
@@ -52,6 +52,10 @@ export default {
   methods: {
     removeProjectCard() {
       this.$store.dispatch('projects/delete', this.projectKey);
+    },
+
+    routing() {
+      this.$router.push('/sequence');
     },
   },
 
