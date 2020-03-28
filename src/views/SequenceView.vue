@@ -1,21 +1,20 @@
 <template>
   <div>
-    <v-card>
-      <v-card-text>
-        <v-file-input v-model="filepart" show-size label="File input"></v-file-input>
-      </v-card-text>
-      <v-card-actions>
-        <v-btn right @click="importTxt">Read File</v-btn>
-      </v-card-actions>
-    </v-card>
+    <v-toolbar dense>
+      <v-spacer></v-spacer>
+
+      <sequence-input />
+    </v-toolbar>
     <v-card style="white-space:nowrap;overflow:scroll;overflow-y:hidden"
-      v-for="(item, idx) in sequences" :key="idx" id="seqLine"
+      id="seqLine"
       class="mx-auto"
     >
-      <v-card-title>{{item.header}}</v-card-title>
-      <v-card-text>
-        <span v-for="(subitem, pos) in item.part" :key="pos">
-            <sequence-symbol :symbol="subitem"></sequence-symbol>
+      <v-card-title v-if="getSequence !== null">{{getSequence.header}}</v-card-title>
+      <v-card-text v-if="getSequence !== null">
+        <span v-for="(subitem, pos) in getSequence.part" :key="pos">
+            <sequence-symbol :from="getFromPosition(pos)"
+                             :to="getToPosition(pos)"
+                             :position="pos"></sequence-symbol>
         </span>
       </v-card-text>
     </v-card>
@@ -24,45 +23,35 @@
 
 <script>
 import SequenceSymbol from '../components/SequenceSymbol.vue';
+import SequenceInput from '../components/SequenceInput.vue';
 
 export default {
   name: 'SequenceView',
   data: () => ({
-    filepart: null,
-    sequences: null,
+    MaxPositionsFromBase: 2,
   }),
-  components: { SequenceSymbol },
+  components: {
+    SequenceSymbol,
+    SequenceInput,
+  },
 
   methods: {
-    importTxt() {
-      if (window.File && window.FileReader
-            && window.FileList && window.Blob) {
-        const reader = new FileReader();
-        reader.readAsText(this.filepart);
-        reader.onload = (e) => {
-          this.sequences = e.target.result.split('>');
+    getFromPosition(pos) {
+      const x = pos <= this.MaxPositionsFromBase ? 0 : (pos - this.MaxPositionsFromBase);
+      return x;
+    },
 
-          if (this.sequences[0] === '') {
-            this.sequences.shift();
-          }
+    getToPosition(pos) {
+      const x = pos === this.getSequence.part.length
+        || pos === (this.getSequence.part.length - 1)
+        ? pos : (pos + this.MaxPositionsFromBase + 1);
+      return x;
+    },
+  },
 
-          const x = this.sequences.map((item) => {
-            const header = item.substr(0, item.indexOf('\n'));
-            let body = item.substr(item.indexOf('\n') + 1);
-            body = body.split('\n');
-            const part = body[1].split('');
-
-            return {
-              header,
-              part,
-            };
-          });
-
-          this.sequences = x;
-        };
-      } else {
-        alert('Dieser Browser unterstützt den Zugriff auf lokale Dateien nicht');
-      }
+  computed: {
+    getSequence() {
+      return this.$store.state.sequences.sequences;
     },
   },
 };
