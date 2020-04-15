@@ -1,51 +1,49 @@
 <template>
   <div>
-    <v-toolbar dense>
-      <v-spacer></v-spacer>
-
+    <v-toolbar dense color="primary">
       <sequence-input />
+
+      <v-spacer></v-spacer>
+      <v-btn dark text v-if="markedSymbols.length === 2">Sequenz einfügen</v-btn>
+      <v-btn dark text v-if="markedSymbols.length > 0">Symbole ersetzen</v-btn>
     </v-toolbar>
-    <v-card style="white-space:nowrap;overflow:scroll;overflow-y:hidden"
+    <v-card style="white-space:nowrap;overflow:auto;overflow-y:hidden"
       id="seqLine"
       class="mx-auto"
     >
       <v-card-title v-if="getSequence !== null">{{getSequence.header}}</v-card-title>
       <v-card-text v-if="getSequence !== null">
-        <span v-for="(subitem, pos) in getSequence.part" :key="pos">
-            <sequence-symbol :from="getFromPosition(pos)"
-                             :to="getToPosition(pos)"
-                             :position="pos"></sequence-symbol>
-        </span>
+        <v-btn-toggle v-model="markedSymbols" multiple dark dense>
+          <span v-for="(subitem, pos) in getSequence.part" :key="pos">
+            <v-btn text x-large color="primary">
+              {{ subitem }}
+            </v-btn>
+          </span>
+        </v-btn-toggle>
       </v-card-text>
     </v-card>
   </div>
 </template>
 
 <script>
-import SequenceSymbol from '../components/SequenceSymbol.vue';
 import SequenceInput from '../components/SequenceInput.vue';
 
 export default {
   name: 'SequenceView',
   data: () => ({
-    MaxPositionsFromBase: 2,
+    markedSymbols: [],
+    previousPosition: null,
   }),
   components: {
-    SequenceSymbol,
     SequenceInput,
   },
 
   methods: {
-    getFromPosition(pos) {
-      const x = pos <= this.MaxPositionsFromBase ? 0 : (pos - this.MaxPositionsFromBase);
-      return x;
-    },
-
-    getToPosition(pos) {
-      const x = pos === this.getSequence.part.length
-        || pos === (this.getSequence.part.length - 1)
-        ? pos : (pos + this.MaxPositionsFromBase + 1);
-      return x;
+    addBaseToSequence(insertObj) {
+      this.$store.state.sequences.sequences.part
+        .splice(insertObj.positionToInsert, 0, insertObj.newSymbol);
+      this.$store.state.sequences.sequences.whichInserted
+        .splice(insertObj.positionToInsert, 0, 1);
     },
   },
 

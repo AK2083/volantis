@@ -65,7 +65,6 @@ export default {
 
   created() {
     this.isSeqLoaded = this.isSequenceLoaded;
-    console.log(this.isSeqLoaded);
   },
 
   methods: {
@@ -100,9 +99,12 @@ export default {
       body = body.toUpperCase();
       const part = this.checkValidity(body);
 
+      const whichInserted = new Array(part.length);
+
       return {
         header,
         part,
+        whichInserted,
       };
     },
 

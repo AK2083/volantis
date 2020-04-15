@@ -3,6 +3,7 @@ export default {
 
   state: {
     sequences: null,
+    currentViewedPosition: null,
   },
 
   mutations: {
