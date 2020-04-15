@@ -93,7 +93,6 @@ export default {
           this.soloAuthentication();
           break;
       }
-      console.log(this.$store);
     },
     socialAuthentication(provider) {
       firebase

@@ -6,6 +6,7 @@ import { firebase, initFirebase } from '../plugins/firebase';
 
 import auth from './auth';
 import projects from './projects';
+import sequences from './sequences';
 
 Vue.use(Vuex);
 
@@ -16,7 +17,7 @@ const easyFirestore = VuexEasyFirestore(
 
 const storeData = {
   plugins: [easyFirestore],
-  modules: { auth },
+  modules: { auth, sequences },
 };
 
 // initialise Vuex
