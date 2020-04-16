@@ -11,4 +11,8 @@ module.exports = {
       enableInSFC: true,
     },
   },
+
+  configureWebpack: {
+    devtool: 'source-map',
+  },
 };
