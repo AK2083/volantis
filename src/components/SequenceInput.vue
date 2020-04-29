@@ -1,13 +1,4 @@
 <template>
-  <!--<v-card>
-    <v-card-text>
-      <v-file-input v-model="filepart" show-size label="File input"></v-file-input>
-    </v-card-text>
-    <v-card-actions>
-      <v-btn right @click="importContentFromFile">Read File</v-btn>
-    </v-card-actions>
-  </v-card>-->
-
   <div class="text-center">
     <v-dialog
       v-model="isSeqLoaded"
